@@ -6,21 +6,22 @@ export interface NoteListResponse {
   totalPages: number;
 }
 
-axios.defaults.baseURL = "https://notehub-public.goit.study/api";
-axios.defaults.headers.common["Authorization"] = `Bearer ${
-  process.env.NEXT_PUBLIC_NOTEHUB_TOKEN
-}`;
+const API_BASE_URL = "https://notehub-public.goit.study/api";
+const headers = {
+  Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
+}
 
 export const getNotes = async (
   page: number,
   search: string
 ): Promise<NoteListResponse> => {
-  const { data } = await axios.get<NoteListResponse>("/notes", {
+  const { data } = await axios.get<NoteListResponse>(`${API_BASE_URL}/notes`, {
     params: {
       page,
       perPage: 12,
       search,
     },
+    headers,
   });
 
   return data;

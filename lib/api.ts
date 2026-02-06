@@ -1,10 +1,13 @@
 import axios from "axios";
 import type { Note } from "../types/note";
 
-axios.defaults.baseURL = "https://notehub-public.goit.study/api";
-axios.defaults.headers.common["Authorization"] = `Bearer ${
-  process.env.NEXT_PUBLIC_NOTEHUB_TOKEN
-}`;
+const api = axios.create({
+  baseURL: "https://notehub-public.goit.study/api",
+  headers: {
+    Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
+  },
+});
+
 
 export interface FetchNotesResponse {
   notes: Note[];
@@ -15,7 +18,7 @@ export const fetchNotes = async (
   page: number,
   search: string
 ): Promise<FetchNotesResponse> => {
-  const { data } = await axios.get<FetchNotesResponse>("/notes", {
+  const { data } = await api.get<FetchNotesResponse>("/notes", {
     params: {
       page,
       perPage: 12,
@@ -27,14 +30,14 @@ export const fetchNotes = async (
 };
 
 export const fetchNoteById = async (id: string): Promise<Note> => {
-  const { data } = await axios.get<Note>(`/notes/${id}`);
+  const { data } = await api.get<Note>(`/notes/${id}`);
   return data;
 };
 
 export const createNote = async (
   note: Omit<Note, "id" | "createdAt" | "updatedAt">
 ): Promise<Note> => {
-  const { data } = await axios.post<Note>("/notes", note);
+  const { data } = await api.post<Note>("/notes", note);
   return data;
 };
 
@@ -42,12 +45,13 @@ export const updateNote = async (
   id: string,
   note: Partial<Note>
 ): Promise<Note> => {
-  const { data } = await axios.patch<Note>(`/notes/${id}`, note);
+  const { data } = await api.patch<Note>(`/notes/${id}`, note);
 
   return data;
 };
 
 export const deleteNote = async (id: string): Promise<Note> => {
-  const { data } = await axios.delete<Note>(`/notes/${id}`);
+  const { data } = await api.delete<Note>(`/notes/${id}`);
   return data;
 };
+

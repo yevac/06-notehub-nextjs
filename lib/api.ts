@@ -1,14 +1,10 @@
 import axios from "axios";
 import type { Note } from "../types/note";
 
-const token = process.env.NOTEHUB_SERVER_TOKEN;
-
 axios.defaults.baseURL = "https://notehub-public.goit.study/api";
-if (token) {
-  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-} else {
-  console.warn("⚠️ NOTEHUB_SERVER_TOKENне встановлена — клієнт використовуватиме /api/proxy (серверний токен)");
-}
+axios.defaults.headers.common.Authorization = `Bearer ${
+  process.env.NEXT_PUBLIC_NOTEHUB_TOKEN
+}`;
 
 export interface FetchNotesResponse {
   notes: Note[];

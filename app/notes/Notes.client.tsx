@@ -4,7 +4,7 @@ import { useState } from "react";
 import css from "./Notes.module.css";
 
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { fetchNotes, type FetchNotesResponse } from "@/lib/api";
+import { getNotes, NoteListResponse,} from "@/lib/api";
 
 import SearchBox from "@/components/SearchBox/SearchBox";
 import Pagination from "@/components/Pagination/Pagination";
@@ -24,9 +24,9 @@ export default function NotesClient() {
 
   const toggleModal = () => setIsModalOpen((v) => !v);
 
-  const { data, isLoading, error } = useQuery<FetchNotesResponse, Error>({
+  const { data, isLoading, error } = useQuery<NoteListResponse, Error>({
     queryKey: ["notes", currentPage, search],
-    queryFn: () => fetchNotes(currentPage, search),
+    queryFn: () => getNotes(currentPage, search),
     placeholderData: keepPreviousData,
   });
 

@@ -6,7 +6,10 @@ export interface NoteListResponse {
   totalPages: number;
 }
 
-axios.defaults.baseURL = "https://next-v1-notes-api.goit.study";
+axios.defaults.baseURL = "https://notehub-public.goit.study/api";
+axios.defaults.headers.common["Authorization"] = `Bearer ${
+  process.env.NEXT_PUBLIC_NOTEHUB_TOKEN
+}`;
 
 export const getNotes = async (
   page: number,

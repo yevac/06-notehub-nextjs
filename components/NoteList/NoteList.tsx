@@ -25,7 +25,7 @@ export default function NoteList({ notes }: NoteListProps) {
           <p>{note.content}</p>
 
           <div>
-            <span>{note.tag}</span>
+            <span>{note.tag} </span>
 
             <button onClick={() => mutation.mutate(note.id)}>
               Delete

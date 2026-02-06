@@ -1,12 +1,14 @@
 import axios from "axios";
 import type { Note } from "../types/note";
 
+const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
 axios.defaults.baseURL = "https://notehub-public.goit.study/api";
-axios.defaults.headers.common.Authorization = `Bearer ${
-  process.env.NEXT_PUBLIC_NOTEHUB_TOKEN
-}`;
-
+if (token) {
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+} else {
+  console.warn("⚠️ NEXT_PUBLIC_NOTEHUB_TOKEN не встановлена");
+}
 
 export interface FetchNotesResponse {
   notes: Note[];
@@ -54,6 +56,5 @@ export const deleteNote = async (id: string): Promise<Note> => {
   return data;
 };
 
-console.log("TOKEN:", process.env.NEXT_PUBLIC_NOTEHUB_TOKEN);
 
 

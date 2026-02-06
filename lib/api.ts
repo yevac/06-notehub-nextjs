@@ -3,7 +3,7 @@ import type { Note } from "../types/note";
 
 const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "https://notehub-public.goit.study/api";
 if (token) {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 } else {

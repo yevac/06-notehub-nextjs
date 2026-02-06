@@ -3,11 +3,11 @@ import type { Note } from "../types/note";
 
 const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
-axios.defaults.baseURL = "https://notehub-public.goit.study/api";
+axios.defaults.baseURL = "/api";
 if (token) {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 } else {
-  console.warn("⚠️ NEXT_PUBLIC_NOTEHUB_TOKEN не встановлена");
+  console.warn("⚠️ NEXT_PUBLIC_NOTEHUB_TOKEN не встановлена — клієнт використовуватиме /api/proxy (серверний токен)");
 }
 
 export interface FetchNotesResponse {

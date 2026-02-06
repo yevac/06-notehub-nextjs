@@ -55,3 +55,6 @@ export const deleteNote = async (id: string): Promise<Note> => {
   return data;
 };
 
+console.log("TOKEN:", process.env.NEXT_PUBLIC_NOTEHUB_TOKEN);
+
+

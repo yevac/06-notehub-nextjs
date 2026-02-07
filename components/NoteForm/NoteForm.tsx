@@ -15,11 +15,11 @@ const schema = Yup.object({
     .required(),
 });
 
-interface NoteListProps {
+interface NoteFormProps {
   closeModal: () => void;
 }
 
-export default function NoteForm({ closeModal }: NoteListProps) {
+export default function NoteForm({ closeModal }: NoteFormProps) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -37,6 +37,10 @@ export default function NoteForm({ closeModal }: NoteListProps) {
       onSubmit={(values) => mutation.mutate(values)}
     >
       <Form className={css.form}>
+        <button type="button" onClick={closeModal}>
+            Cancel
+        </button>
+
         <Field name="title" placeholder="Title" />
         <ErrorMessage name="title" component="div" className={css.error} />
         <Field name="content" as="textarea" placeholder="Content" />

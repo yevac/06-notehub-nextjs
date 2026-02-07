@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import css from "./Notes.module.css";
 
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
@@ -15,18 +15,29 @@ import NoteList from "@/components/NoteList/NoteList";
 export default function NotesClient() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
+  const [debouncedSearch, setDebouncedSearch] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
 
   const handleChange = (value: string) => {
     setSearch(value);
     setCurrentPage(1);
   };
 
-  const toggleModal = () => setIsModalOpen((v) => !v);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const { data, isLoading, error } = useQuery<NoteListResponse, Error>({
-    queryKey: ["notes", currentPage, search],
-    queryFn: () => getNotes(currentPage, search),
+    queryKey: ["notes", currentPage, debouncedSearch],
+    queryFn: () => getNotes(currentPage, debouncedSearch),
     placeholderData: keepPreviousData,
   });
 
@@ -39,22 +50,22 @@ export default function NotesClient() {
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox onSearch={handleChange} />
+        <SearchBox value={search} onSearch={handleChange} />
         {totalPages > 1 && (
           <Pagination
             totalPages={totalPages}
             page={currentPage}
-            onChange={setCurrentPage}
+            onPageChange={setCurrentPage}
           />
         )}
-        <button onClick={toggleModal} className={css.button}>
+        <button onClick={openModal} className={css.button}>
           Create note +
         </button>
       </header>
 
       {isModalOpen && (
-        <Modal onClose={toggleModal}>
-            <NoteForm closeModal={toggleModal} />
+        <Modal onClose={closeModal}>
+            <NoteForm closeModal={closeModal} />
         </Modal>
       )}
 

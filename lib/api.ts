@@ -14,11 +14,16 @@ export interface FetchNotesParams {
   sortBy?: "created" | "updated";
 }
 
-function getAuthHeaders(): { Authorization: string } {
+const axiosInstance = axios.create({
+  baseURL: "https://notehub-public.goit.study/api",
+});
+
+function getAuthHeaders() {
   const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
   if (!token) {
-    throw new Error("NEXT_PUBLIC_NOTEHUB_TOKEN is not defined");
+    console.error("Missing NEXT_PUBLIC_NOTEHUB_TOKEN");
+    throw new Error("Server configuration error");
   }
 
   return {
@@ -26,9 +31,8 @@ function getAuthHeaders(): { Authorization: string } {
   };
 }
 
-const axiosInstance = axios.create({
-  baseURL: "https://notehub-public.goit.study/api",
-});
+console.log("API URL:", axiosInstance.defaults.baseURL);
+
 
 export async function getNotes({
   page,

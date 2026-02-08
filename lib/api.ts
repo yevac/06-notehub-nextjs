@@ -14,22 +14,19 @@ export interface FetchNotesParams {
   sortBy?: "created" | "updated";
 }
 
+const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
+
+if (!token) {
+  throw new Error("Missing NEXT_PUBLIC_NOTEHUB_TOKEN");
+}
+
 const axiosInstance = axios.create({
   baseURL: "https://notehub-public.goit.study/api",
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
 });
 
-function getAuthHeaders() {
-  const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
-
-  if (!token) {
-    console.error("Missing NEXT_PUBLIC_NOTEHUB_TOKEN");
-    throw new Error("Server configuration error");
-  }
-
-  return {
-    Authorization: `Bearer ${token}`,
-  };
-}
 
 console.log("API URL:", axiosInstance.defaults.baseURL);
 
@@ -51,7 +48,6 @@ export async function getNotes({
 
   const response = await axiosInstance.get<FetchNotesResponse>("/notes", {
     params,
-    headers: getAuthHeaders(),
   });
 
   return response.data;
@@ -59,7 +55,6 @@ export async function getNotes({
 
 export async function createNote(payload: CreateNoteParams): Promise<Note> {
   const response = await axiosInstance.post<Note>("/notes", payload, {
-    headers: getAuthHeaders(),
   });
 
   return response.data;
@@ -67,7 +62,6 @@ export async function createNote(payload: CreateNoteParams): Promise<Note> {
 
 export async function deleteNote(id: string): Promise<Note> {
   const response = await axiosInstance.delete<Note>(`/notes/${id}`, {
-    headers: getAuthHeaders(),
   });
 
   return response.data;
@@ -75,7 +69,6 @@ export async function deleteNote(id: string): Promise<Note> {
 
 export async function fetchNoteById(id: string): Promise<Note> {
   const response = await axiosInstance.get<Note>(`/notes/${id}`, {
-    headers: getAuthHeaders(),
   });
 
   return response.data;
